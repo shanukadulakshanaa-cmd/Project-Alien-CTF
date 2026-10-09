@@ -1,0 +1,276 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>A.R.G.U.S. — STG-{{ '%02d'|format(stage.id) }} | {{ stage.codename }}</title>
+{% endblock %}
+
+{% block content %}
+<div class="stage-container">
+    <!-- Stage Header -->
+    <div class="stage-header">
+        <a href="{{ url_for('dashboard') }}" class="back-link">◂ RETURN TO DASHBOARD</a>
+        <div class="stage-header-content">
+            <div class="stage-badge">
+                <span class="stage-num-large">STG-{{ '%02d'|format(stage.id) }}</span>
+                <span class="stage-difficulty diff-{{ stage.difficulty|lower }}">{{ stage.difficulty|upper }}</span>
+            </div>
+            <div class="stage-info">
+                <h1 class="stage-title">
+                    <span class="stage-icon">{{ stage.domain_icon }}</span>
+                    {{ stage.codename }}
+                </h1>
+                <div class="stage-meta">
+                    <span class="meta-item"><strong>DOMAIN:</strong> {{ stage.domain }}</span>
+                    <span class="meta-divider">│</span>
+                    <span class="meta-item"><strong>FACTION:</strong> {{ stage.faction }}</span>
+                    <span class="meta-divider">│</span>
+                    <span class="meta-item"><strong>POINTS:</strong> {{ stage.points }}</span>
+                </div>
+                <p class="stage-faction-desc">{{ stage.faction_desc }}</p>
+            </div>
+            {% if is_completed %}
+            <div class="stage-status-complete">
+                <span class="complete-badge">✓ NEUTRALIZED</span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Stage Description -->
+    <div class="stage-section">
+        <h2 class="section-heading">
+            <span class="heading-icon">📋</span> MISSION OVERVIEW
+        </h2>
+        <div class="section-body">
+            <p class="stage-description">{{ stage.description }}</p>
+        </div>
+    </div>
+
+    <!-- Briefing (the actual challenge content) -->
+    <div class="stage-section briefing-section">
+        <h2 class="section-heading">
+            <span class="heading-icon">📡</span> INTELLIGENCE BRIEFING
+        </h2>
+        <div class="section-body terminal-output">
+            <pre class="briefing-text">{{ stage.briefing }}</pre>
+        </div>
+    </div>
+
+    <!-- Downloadable Files -->
+    {% if stage.files %}
+    <div class="stage-section">
+        <h2 class="section-heading">
+            <span class="heading-icon">📁</span> EVIDENCE FILES
+        </h2>
+        <div class="section-body">
+            {% if stage.requires_token and not session.get('vault_access') %}
+            <div class="token-gate">
+                <div class="gate-icon">🔒</div>
+                <h3>CLEARANCE REQUIRED</h3>
+                <p>This evidence is classified. Enter the administrative clearance token obtained from Stage 04.</p>
+                <div class="token-input-group">
+                    <input type="text" id="vault-token" placeholder="Enter clearance token..." class="token-input" autocomplete="off">
+                    <button onclick="verifyToken()" class="btn-verify" id="btn-verify">VERIFY TOKEN</button>
+                </div>
+                <div id="token-result" class="token-result"></div>
+            </div>
+            {% else %}
+            <div class="files-list">
+                {% for filename in stage.files %}
+                <a href="{{ url_for('download_file', filename=filename) }}" class="file-item">
+                    <span class="file-icon">💾</span>
+                    <span class="file-name">{{ filename }}</span>
+                    <span class="file-action">DOWNLOAD ▸</span>
+                </a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Hints -->
+    <div class="stage-section">
+        <h2 class="section-heading">
+            <span class="heading-icon">💡</span> INTELLIGENCE SUPPORT
+        </h2>
+        <div class="section-body">
+            {% for hint in stage.hints %}
+            <div class="hint-item" id="hint-{{ loop.index0 }}">
+                {% if loop.index0 in used_hints %}
+                <div class="hint-revealed">
+                    <div class="hint-header">
+                        <span class="hint-label">HINT {{ loop.index }} (USED)</span>
+                        <span class="hint-cost text-danger">-{{ hint.cost }} pts</span>
+                    </div>
+                    <p class="hint-text">{{ hint.text }}</p>
+                </div>
+                {% else %}
+                <div class="hint-locked">
+                    <div class="hint-header">
+                        <span class="hint-label">HINT {{ loop.index }}</span>
+                        <span class="hint-cost text-warning">Cost: -{{ hint.cost }} pts</span>
+                    </div>
+                    <button onclick="requestHint({{ stage.id }}, {{ loop.index0 }})" 
+                            class="btn-hint" {% if is_completed %}disabled{% endif %}>
+                        REQUEST INTEL SUPPORT
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Flag Submission -->
+    {% if not is_completed %}
+    <div class="stage-section submit-section">
+        <h2 class="section-heading">
+            <span class="heading-icon">🏁</span> FLAG SUBMISSION
+        </h2>
+        <div class="section-body">
+            <div class="submit-form">
+                <div class="submit-input-group">
+                    <span class="submit-prefix">▸ ALIEN{</span>
+                    <input type="text" id="flag-input" placeholder="enter_flag_content_here" 
+                           autocomplete="off" spellcheck="false">
+                    <span class="submit-suffix">}</span>
+                </div>
+                <button onclick="submitFlag({{ stage.id }})" class="btn-submit" id="btn-submit">
+                    SUBMIT FLAG
+                </button>
+            </div>
+            <div id="submit-result" class="submit-result"></div>
+        </div>
+    </div>
+    {% else %}
+    <div class="stage-section">
+        <div class="completed-banner">
+            <span class="complete-icon-large">✓</span>
+            <h3>FACTION NEUTRALIZED</h3>
+            <p>You have successfully completed this stage. {{ stage.points }} points awarded.</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function submitFlag(stageId) {
+    const input = document.getElementById('flag-input');
+    const resultDiv = document.getElementById('submit-result');
+    const btn = document.getElementById('btn-submit');
+    const rawInput = input.value.trim();
+    
+    // Allow submitting with or without the ALIEN{} wrapper
+    let flag;
+    if (rawInput.startsWith('ALIEN{') && rawInput.endsWith('}')) {
+        flag = rawInput;
+    } else {
+        flag = 'ALIEN{' + rawInput + '}';
+    }
+    
+    if (!rawInput) {
+        resultDiv.innerHTML = '<div class="result-error">Enter a flag value.</div>';
+        return;
+    }
+    
+    btn.disabled = true;
+    btn.innerHTML = 'ANALYZING...';
+    
+    fetch(`/submit/${stageId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ flag: flag })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            resultDiv.innerHTML = `
+                <div class="result-success">
+                    <span class="result-icon">✓</span>
+                    <div>
+                        <strong>${data.message}</strong>
+                        <br><span class="result-points">+${data.points} points</span>
+                    </div>
+                </div>`;
+            // Reload after brief delay to show updated state
+            setTimeout(() => window.location.reload(), 2000);
+        } else {
+            resultDiv.innerHTML = `
+                <div class="result-error">
+                    <span class="result-icon">✗</span>
+                    <span>${data.message}</span>
+                </div>`;
+            btn.disabled = false;
+            btn.innerHTML = 'SUBMIT FLAG';
+        }
+    })
+    .catch(err => {
+        resultDiv.innerHTML = '<div class="result-error">Connection error. Try again.</div>';
+        btn.disabled = false;
+        btn.innerHTML = 'SUBMIT FLAG';
+    });
+}
+
+function requestHint(stageId, hintIndex) {
+    if (!confirm('Are you sure? Using this hint will deduct points from your score.')) return;
+    
+    fetch(`/hint/${stageId}/${hintIndex}`, { method: 'POST' })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            const hintDiv = document.getElementById(`hint-${hintIndex}`);
+            hintDiv.innerHTML = `
+                <div class="hint-revealed">
+                    <div class="hint-header">
+                        <span class="hint-label">HINT ${hintIndex + 1} (USED)</span>
+                        <span class="hint-cost text-danger">-${data.cost} pts</span>
+                    </div>
+                    <p class="hint-text">${data.hint}</p>
+                </div>`;
+        }
+    });
+}
+
+function verifyToken() {
+    const input = document.getElementById('vault-token');
+    const resultDiv = document.getElementById('token-result');
+    const btn = document.getElementById('btn-verify');
+    const token = input.value.trim();
+    
+    if (!token) {
+        resultDiv.innerHTML = '<div class="result-error">Enter a token.</div>';
+        return;
+    }
+    
+    btn.disabled = true;
+    
+    fetch('/verify-token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: token })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            resultDiv.innerHTML = `<div class="result-success"><span class="result-icon">✓</span> ${data.message}</div>`;
+            setTimeout(() => window.location.reload(), 1500);
+        } else {
+            resultDiv.innerHTML = `<div class="result-error"><span class="result-icon">✗</span> ${data.message}</div>`;
+            btn.disabled = false;
+        }
+    })
+    .catch(err => {
+        resultDiv.innerHTML = '<div class="result-error">Connection error.</div>';
+        btn.disabled = false;
+    });
+}
+
+// Allow Enter key to submit flag
+document.getElementById('flag-input')?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') submitFlag({{ stage.id }});
+});
+</script>
+{% endblock %}
