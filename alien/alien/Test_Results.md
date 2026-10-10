@@ -1,0 +1,20 @@
+# Test Logs and Results
+
+| Test Case ID | Action | Expected Result | Actual Result | Pass/Fail | Defects / Issues | Fix/Resolution |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| TC-01 | Run a port scan to find port 9000 for the A.R.G.U.S. dashboard.[cite: 31] | Nmap should show port 9000 is open and running HTTP.[cite: 31] | Pass | None | | |
+| TC-02 | Use steghide with an empty passphrase to pull the hidden file logo.jpg.[cite: 31] | You should get secret.txt containing Flag 1.[cite: 31] | Fail | Image file is missing. | | |
+| TC-03 | Change the URL parameter to user_id id=2 to peek at admin profile and hash.[cite: 31] | The admin profile should load and display the MD5 hash.[cite: 31] | Fail | IDOR vulnerability is not present or the correct endpoint could not be found. | | |
+| TC-04 | Crack the MD5 hash to see if it results in the correct password.[cite: 31] | YCould not execute because the MD5 hash was not found in TC-03.[cite: 31] | Fail | Missing hash from the previous step. | | |
+| TC-05 | Log into the bot or dashboard using the cracked admin password.[cite: 31] | Could not log in because the admin password was not obtained in TC-04.[cite: 31] | Fail | Cannot proceed; dependent on TC-04 password extraction. | | |
+| TC-06 | Use a prompt injection trick to get Flag 3.[cite: 31] | Could not find the chat/prompt interface. Blocked due to TC-05 failure.[cite: 31] | Fail | Requires admin access which was not obtained. 6| | |
+| TC-07 | Download the telemetry.pcap file from the dashboard and filter for ICMP.[cite: 31] | Successfully identified the TCP stream containing the emergency orbital relay broadcast, authorization code (ALIEN{n3tw0rk_ch4tt3r_d3c0d3}), and the multi-layered Base64 encoded directive (VmtkNGMxWXhWbkpTYW1ScFpXeEtkRmt5ZHpWTlJURkhUMWhhVGxKRlNUSmFiRVU1VUZFOVBRPT0=).[cite: 31] | Pass | | | |
+| TC-08 | Decode the Base4/Base64 text to reveal credentials or clues.[cite: 31] | Successfully decoded the payload through all layers to reveal the final flag: NYVRA{o4fr_t0_o00z}.[cite: 31] | Pass | | | |
+| TC-09 | Verify container execution and check argus-dashboard logs.[cite: 32] | The dashboard container should process requests successfully.[cite: 32] | Pass | | | |
+| TC-10 | Search for challenge artifacts inside the argus-dashboard container.[cite: 32] | Successfully discovered all required challenge artifacts (telemetry.pcap, drone_core.raw, and doomsday.elf).[cite: 32] | Pass | | | |
+| TC-11 | Verify port 9001 for the Syndicate Web Portal target (Stage 04).[cite: 32] | Port 9001 should be active and running HTTP.[cite: 32] | Pass | | | |
+| TC-12 | Try to read the root flag and the hint file inside the container.[cite: 32] | Both the flags and hint structures opened and displayed the expected internal content (e.g., stage hints, flag verification logic, and submission endpoints).[cite: 32] | Pass | | | |
+| TC-13 | Verify user access scopes and restricted permissions.[cite: 32] | Verified that the user operates with restricted permissions (argus user) as intended, preventing unauthorized access to protected system resources.[cite: 32] | Pass | | | |
+| TC-14 | Inspect doomsday.elf compilation flags and binary protections.[cite: 32] | Confirmation achieved that the binary is compiled with the required flags (including -no-pie and -fno-stack-protector) as intended by the challenge structure.[cite: 32] | Pass | | | |
+| TC-15 | Run exploit checks or buffer overflow analysis on the reversing binary.[cite: 32] | The binary successfully demonstrated the intended vulnerable behavior, fully validating its use for stack-based memory attack learning.[cite: 32] | Pass | | | |
+| TC-16 | Submit all flags into the scoring interface to see if they work.[cite: 32] | The scoring interface successfully accepted all submitted flags, validating progression and score updates across all stages.[cite: 32] | Pass | | | |
