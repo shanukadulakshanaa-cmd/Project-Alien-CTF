@@ -1,7 +1,0 @@
-services:
-  juice-shop:
-    image: bkimminich/juice-shop:v16.0.0
-    container_name: juice-shop-app
-    ports:
-      - "3000:3000"
-    restart: always
