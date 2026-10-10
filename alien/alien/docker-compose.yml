@@ -1,0 +1,55 @@
+version: "3.8"
+
+# ═══════════════════════════════════════════════════════════════
+# Operation: Extraterrestrial Dawn
+# CTF Platform — Docker Compose Configuration
+# ═══════════════════════════════════════════════════════════════
+
+services:
+
+  # ─── A.R.G.U.S. Threat Assessment Dashboard (Port 9000) ─────
+  dashboard:
+    build:
+      context: .
+      dockerfile: ./dashboard/Dockerfile
+    container_name: argus-dashboard
+    ports:
+      - "9000:9000"
+    volumes:
+      - dashboard-data:/app/data
+    networks:
+      - argus_net
+    restart: unless-stopped
+    environment:
+      - SECRET_KEY=ARGUS-CTF-SECRET-KEY-2024
+      - FLASK_ENV=production
+
+  # ─── Syndicate Web Portal (Port 9001) ──────────────────────
+  portal:
+    build:
+      context: portal
+      dockerfile: Dockerfile
+    container_name: syndicate-portal
+    ports:
+      - "9001:9001"
+    volumes:
+      - portal-data:/app/data
+    networks:
+      - argus_net
+    restart: unless-stopped
+
+# ─── Volumes ─────────────────────────────────────────────────
+volumes:
+  dashboard-data:
+    driver: local
+  portal-data:
+    driver: local
+
+# ─── Network ─────────────────────────────────────────────────
+networks:
+  argus_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
+    internal: false

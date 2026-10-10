@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>A.R.G.U.S. — Mission Briefing</title>
+{% endblock %}
+
+{% block content %}
+<div class="briefing-container">
+    <div class="briefing-header">
+        <div class="classified-stamp">TOP SECRET</div>
+        <h1 class="briefing-title">OPERATION: EXTRATERRESTRIAL DAWN</h1>
+        <p class="briefing-meta">
+            CLASSIFICATION: COSMIC-TS/SCI | DATE: {{ "now" }} | CLEARANCE: OMEGA
+        </p>
+    </div>
+
+    <div class="briefing-document">
+        <div class="doc-section">
+            <h2 class="doc-heading">1. SITUATION OVERVIEW</h2>
+            <div class="doc-content">
+                <p>Earth's early warning systems have detected <strong class="text-danger">six unauthorized atmospheric entries</strong> 
+                over the past 72 hours. The entities have scattered globally and are using human technology to mask 
+                their communications and evade detection.</p>
+                <p>Preliminary analysis confirms these are <span class="text-cyan">extraterrestrial in origin</span>. 
+                Each entity belongs to a distinct faction with unique capabilities and objectives.</p>
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <h2 class="doc-heading">2. YOUR MISSION</h2>
+            <div class="doc-content">
+                <p>You are <strong class="text-green">Agent {{ codename }}</strong>, 
+                a specialist assigned to A.R.G.U.S. — the <span class="text-cyan">Alien Reconnaissance & 
+                Global Unified Security</span> division.</p>
+                <p>Your mission is to systematically track, decode, and neutralize all six alien factions 
+                through a progressive chain of cyber-investigation operations.</p>
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <h2 class="doc-heading">3. THREAT MATRIX</h2>
+            <div class="threat-matrix">
+                <div class="threat-row threat-header-row">
+                    <span>STAGE</span>
+                    <span>FACTION</span>
+                    <span>DOMAIN</span>
+                    <span>THREAT LEVEL</span>
+                </div>
+                <div class="threat-row">
+                    <span class="stage-num">01</span>
+                    <span>Zeta Greys</span>
+                    <span>OSINT</span>
+                    <span class="threat-easy">LOW</span>
+                </div>
+                <div class="threat-row">
+                    <span class="stage-num">02</span>
+                    <span>Proxima Sentinels</span>
+                    <span>Networking</span>
+                    <span class="threat-easy">LOW</span>
+                </div>
+                <div class="threat-row">
+                    <span class="stage-num">03</span>
+                    <span>Cipher Collective</span>
+                    <span>Cryptography</span>
+                    <span class="threat-moderate">MODERATE</span>
+                </div>
+                <div class="threat-row">
+                    <span class="stage-num">04</span>
+                    <span>Stellar Dawn</span>
+                    <span>Web Security</span>
+                    <span class="threat-moderate">MODERATE</span>
+                </div>
+                <div class="threat-row">
+                    <span class="stage-num">05</span>
+                    <span>Navigator Drones</span>
+                    <span>Forensics</span>
+                    <span class="threat-hard">HIGH</span>
+                </div>
+                <div class="threat-row">
+                    <span class="stage-num">06</span>
+                    <span>Mothership Command</span>
+                    <span>Reverse Engineering</span>
+                    <span class="threat-hard">CRITICAL</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <h2 class="doc-heading">4. OPERATIONAL GUIDELINES</h2>
+            <div class="doc-content">
+                <ul class="guidelines-list">
+                    <li>Stages must be completed <strong>sequentially</strong>. Each neutralized faction unlocks the next.</li>
+                    <li>Flags follow the format: <code class="flag-format">ALIEN{...}</code></li>
+                    <li>Hints are available but incur a <span class="text-danger">point penalty</span>.</li>
+                    <li>The Syndicate Portal (Port 9001) is a separate target for Stage 04.</li>
+                    <li>Stage 05 requires a clearance token obtained from Stage 04.</li>
+                    <li>All challenge files can be downloaded from the stage detail pages.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="doc-section">
+            <h2 class="doc-heading">5. TOOLS & RESOURCES</h2>
+            <div class="doc-content">
+                <div class="tools-grid">
+                    <div class="tool-item">
+                        <span class="tool-icon">🌐</span>
+                        <span class="tool-name">Web Browser</span>
+                        <span class="tool-use">OSINT, Web</span>
+                    </div>
+                    <div class="tool-item">
+                        <span class="tool-icon">📡</span>
+                        <span class="tool-name">Wireshark</span>
+                        <span class="tool-use">Networking</span>
+                    </div>
+                    <div class="tool-item">
+                        <span class="tool-icon">🔑</span>
+                        <span class="tool-name">CyberChef</span>
+                        <span class="tool-use">Cryptography</span>
+                    </div>
+                    <div class="tool-item">
+                        <span class="tool-icon">🕸️</span>
+                        <span class="tool-name">Burp Suite</span>
+                        <span class="tool-use">Web Security</span>
+                    </div>
+                    <div class="tool-item">
+                        <span class="tool-icon">🧬</span>
+                        <span class="tool-name">Volatility 3</span>
+                        <span class="tool-use">Forensics</span>
+                    </div>
+                    <div class="tool-item">
+                        <span class="tool-icon">⚙️</span>
+                        <span class="tool-name">Ghidra / GDB</span>
+                        <span class="tool-use">Reverse Eng.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="briefing-footer">
+        <a href="{{ url_for('dashboard') }}" class="btn-proceed">
+            <span class="btn-text">PROCEED TO THREAT DASHBOARD</span>
+            <span class="btn-arrow">▸▸▸</span>
+        </a>
+        <p class="briefing-warning">
+            ⚠ This document is classified TOP SECRET. Unauthorized distribution is a federal offense.
+        </p>
+    </div>
+</div>
+{% endblock %}

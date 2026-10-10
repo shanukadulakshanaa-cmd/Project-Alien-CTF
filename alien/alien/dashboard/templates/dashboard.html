@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>A.R.G.U.S. — Threat Assessment Dashboard</title>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="status-item">
+            <span class="status-label">AGENT</span>
+            <span class="status-value text-green">{{ codename }}</span>
+        </div>
+        <div class="status-item">
+            <span class="status-label">SCORE</span>
+            <span class="status-value text-cyan">{{ total_score }} / {{ max_points }}</span>
+        </div>
+        <div class="status-item">
+            <span class="status-label">NEUTRALIZED</span>
+            <span class="status-value">{{ stages_completed }} / {{ total_stages }}</span>
+        </div>
+        <div class="status-item">
+            <span class="status-label">HINT PENALTY</span>
+            <span class="status-value text-danger">-{{ hint_penalty }}</span>
+        </div>
+        <div class="status-item status-progress">
+            <span class="status-label">MISSION PROGRESS</span>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ (stages_completed / total_stages * 100)|round }}%"></div>
+            </div>
+            <span class="progress-text">{{ (stages_completed / total_stages * 100)|round|int }}%</span>
+        </div>
+    </div>
+
+    <!-- Dashboard Header -->
+    <div class="dash-header">
+        <h1 class="dash-title">
+            <span class="title-icon">◆</span>
+            GLOBAL THREAT ASSESSMENT
+        </h1>
+        <p class="dash-subtitle">Track and neutralize all six extraterrestrial factions</p>
+    </div>
+
+    {% if stages_completed == total_stages %}
+    <div class="victory-banner">
+        <div class="victory-icon">🏆</div>
+        <div class="victory-content">
+            <h2>MISSION COMPLETE — ALL THREATS NEUTRALIZED</h2>
+            <p>Outstanding work, Agent {{ codename }}. Earth is secure. Final Score: {{ total_score }} / {{ max_points }}</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Threat Cards Grid -->
+    <div class="threat-grid">
+        {% for sid, stage in stages.items() %}
+        {% set status = stage_status[sid] %}
+        <div class="threat-card threat-{{ status|lower }}" data-stage="{{ sid }}">
+            <!-- Card Header -->
+            <div class="card-header">
+                <div class="card-stage-num">STG-{{ '%02d'|format(sid) }}</div>
+                <div class="card-status-badge status-{{ status|lower }}">{{ status }}</div>
+            </div>
+
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="card-icon">{{ stage.domain_icon }}</div>
+                <h2 class="card-title">{{ stage.codename }}</h2>
+                <p class="card-faction">
+                    <span class="faction-label">FACTION:</span> {{ stage.faction }}
+                </p>
+                <p class="card-domain">{{ stage.domain }}</p>
+
+                <!-- Difficulty Indicator -->
+                <div class="card-difficulty">
+                    <span class="diff-label">THREAT:</span>
+                    <div class="diff-bars">
+                        {% for i in range(3) %}
+                        <div class="diff-bar {% if i < stage.difficulty_level %}diff-active diff-level-{{ stage.difficulty_level }}{% endif %}"></div>
+                        {% endfor %}
+                    </div>
+                    <span class="diff-text diff-{{ stage.difficulty|lower }}">{{ stage.difficulty }}</span>
+                </div>
+
+                <!-- Points -->
+                <div class="card-points">
+                    <span class="points-value">{{ stage.points }}</span>
+                    <span class="points-label">PTS</span>
+                </div>
+            </div>
+
+            <!-- Card Footer -->
+            <div class="card-footer">
+                {% if status == 'NEUTRALIZED' %}
+                <div class="card-complete">
+                    <span class="complete-icon">✓</span>
+                    <span>NEUTRALIZED</span>
+                </div>
+                {% elif status == 'ACTIVE' %}
+                <a href="{{ url_for('stage_detail', stage_id=sid) }}" class="btn-engage">
+                    <span>ENGAGE THREAT</span>
+                    <span class="btn-arrow">▸</span>
+                </a>
+                {% else %}
+                <div class="card-locked">
+                    <span class="locked-icon">🔒</span>
+                    <span>LOCKED — Complete Stage {{ sid - 1 }} first</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

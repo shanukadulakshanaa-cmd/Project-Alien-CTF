@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Dawn — Inner Sanctum</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="stars-bg"></div>
+    <div class="portal-container dashboard-view">
+        <div class="portal-header">
+            <div class="eye-symbol">👁</div>
+            <h1 class="cult-title">INNER SANCTUM</h1>
+            <p class="cult-subtitle">— Classified Communications —</p>
+            <div class="divider">✦ ✦ ✦</div>
+        </div>
+
+        <div class="user-info">
+            <span class="user-badge">Logged in as: <strong>{{ username }}</strong></span>
+            <span class="role-badge">Rank: {{ role }}</span>
+            <a href="{{ url_for('logout') }}" class="btn-logout">LEAVE SANCTUM</a>
+        </div>
+
+        <div class="flag-banner">
+            <div class="flag-icon">🏴</div>
+            <div class="flag-content">
+                <h3>AUTHORIZATION VERIFIED</h3>
+                <p class="flag-text">{{ flag }}</p>
+            </div>
+        </div>
+
+        <div class="comms-section">
+            <h2 class="section-title">📡 Intercepted Communications</h2>
+            <div class="comms-list">
+                {% for comm in communications %}
+                <div class="comm-item {% if 'CLASSIFIED' in comm['message'] or 'FLAG' in comm['message'] %}comm-classified{% endif %}">
+                    <div class="comm-header">
+                        <span class="comm-sender">{{ comm['sender'] }}</span>
+                        <span class="comm-time">{{ comm['timestamp'] }}</span>
+                    </div>
+                    <div class="comm-body">{{ comm['message'] }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="token-section">
+            <h3>🔑 Secure Vault Access Token</h3>
+            <p class="token-hint">Use this token on the A.R.G.U.S. dashboard to unlock Stage 05:</p>
+            <code class="token-value">{{ admin_token }}</code>
+        </div>
+    </div>
+</body>
+</html>

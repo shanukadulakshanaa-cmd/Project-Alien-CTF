@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A.R.G.U.S. Threat Assessment Dashboard — Alien Reconnaissance & Global Unified Security">
+    <title>A.R.G.U.S. — Threat Assessment Interface</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <!-- Scanline overlay -->
+    <div class="scanline-overlay"></div>
+
+    <!-- Matrix rain canvas -->
+    <canvas id="matrix-rain"></canvas>
+
+    <!-- Navigation Bar -->
+    {% if session.get('agent_codename') %}
+    <nav class="nav-bar">
+        <div class="nav-left">
+            <div class="nav-logo">
+                <span class="logo-icon">◆</span>
+                <span class="logo-text">A.R.G.U.S.</span>
+            </div>
+            <span class="nav-divider">│</span>
+            <span class="nav-system">THREAT ASSESSMENT INTERFACE v4.2.1</span>
+        </div>
+        <div class="nav-right">
+            <span class="nav-agent">
+                <span class="agent-indicator"></span>
+                AGENT: <strong>{{ session.get('agent_codename') }}</strong>
+            </span>
+            <a href="{{ url_for('dashboard') }}" class="nav-link">DASHBOARD</a>
+            <a href="{{ url_for('briefing') }}" class="nav-link">BRIEFING</a>
+            <a href="{{ url_for('logout') }}" class="nav-link nav-link-danger">DISCONNECT</a>
+        </div>
+    </nav>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main class="main-content {% if session.get('agent_codename') %}has-nav{% endif %}">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-msg flash-{{ category }}">
+                            <span class="flash-icon">{% if category == 'error' %}✗{% elif category == 'success' %}✓{% else %}ℹ{% endif %}</span>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <span class="footer-logo">◆ A.R.G.U.S.</span>
+            <span class="footer-text">Alien Reconnaissance & Global Unified Security</span>
+            <span class="footer-status">SYS STATUS: <span class="status-online">OPERATIONAL</span></span>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
