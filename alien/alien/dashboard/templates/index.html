@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>A.R.G.U.S. — System Boot</title>
+{% endblock %}
+
+{% block content %}
+<div class="boot-container">
+    <div class="boot-screen">
+        <!-- Boot animation sequence -->
+        <div class="boot-logo">
+            <div class="logo-diamond">◆</div>
+            <h1 class="boot-title">A.R.G.U.S.</h1>
+            <p class="boot-subtitle">Alien Reconnaissance & Global Unified Security</p>
+        </div>
+
+        <div class="boot-sequence" id="boot-sequence">
+            <div class="boot-line" data-delay="200">[SYS] Initializing secure terminal...</div>
+            <div class="boot-line" data-delay="500">[SYS] Loading threat assessment modules...</div>
+            <div class="boot-line" data-delay="800">[NET] Establishing encrypted satellite uplink... <span class="text-green">OK</span></div>
+            <div class="boot-line" data-delay="1100">[SEC] Verifying quantum encryption protocols... <span class="text-green">OK</span></div>
+            <div class="boot-line" data-delay="1400">[DB ] Syncing global threat database... <span class="text-green">OK</span></div>
+            <div class="boot-line" data-delay="1700">[SAT] Orbital sensor array connected... <span class="text-cyan">6 anomalies detected</span></div>
+            <div class="boot-line" data-delay="2000">[SYS] ████████████████████████████ <span class="text-green">BOOT COMPLETE</span></div>
+            <div class="boot-line" data-delay="2300">[AUTH] Agent identification required...</div>
+        </div>
+
+        <!-- Agent Registration Form -->
+        <div class="boot-auth" id="boot-auth">
+            <div class="auth-border">
+                <div class="auth-header">
+                    <span class="auth-label">AGENT IDENTIFICATION</span>
+                </div>
+                <form method="POST" action="{{ url_for('register') }}" class="auth-form">
+                    <div class="auth-input-group">
+                        <label for="codename">ENTER CODENAME</label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">▸</span>
+                            <input type="text" id="codename" name="codename" 
+                                   placeholder="e.g. PHANTOM, RAVEN, SPECTER" 
+                                   required autocomplete="off" maxlength="30"
+                                   spellcheck="false">
+                            <span class="input-cursor">█</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-authenticate" id="btn-auth">
+                        <span class="btn-text">AUTHENTICATE</span>
+                        <span class="btn-icon">→</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="boot-footer">
+            <p class="classification">TOP SECRET // COSMIC // A.R.G.U.S. EYES ONLY</p>
+            <p class="version">Interface v4.2.1 | Clearance Level: OMEGA</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const lines = document.querySelectorAll('.boot-line');
+    const authPanel = document.getElementById('boot-auth');
+    
+    // Initially hide all boot lines and auth panel
+    lines.forEach(line => line.style.opacity = '0');
+    authPanel.style.opacity = '0';
+    authPanel.style.transform = 'translateY(20px)';
+    
+    // Animate boot lines sequentially
+    lines.forEach((line, index) => {
+        const delay = parseInt(line.dataset.delay) || (index * 300);
+        setTimeout(() => {
+            line.style.opacity = '1';
+            line.style.transition = 'opacity 0.3s ease';
+            // Play a subtle beep (optional)
+        }, delay);
+    });
+    
+    // Show auth panel after boot sequence
+    const lastDelay = parseInt(lines[lines.length - 1]?.dataset?.delay || 2300);
+    setTimeout(() => {
+        authPanel.style.opacity = '1';
+        authPanel.style.transform = 'translateY(0)';
+        authPanel.style.transition = 'all 0.5s ease';
+        document.getElementById('codename')?.focus();
+    }, lastDelay + 500);
+});
+</script>
+{% endblock %}
