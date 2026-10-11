@@ -37,8 +37,8 @@
 ### Deployment
 
 ```bash
-# Clone the repository
-cd alien
+# Clone the repository, then enter the project folder
+cd Project-Alien-CTF
 
 # Build and start all containers
 docker-compose up -d --build
@@ -108,7 +108,8 @@ All flags follow the format: `ALIEN{...}`
 # Stop all containers
 docker-compose down
 
-# Reset all data (clear scores and databases)
+# Restarting a service keeps player progress (SQLite lives in a Docker volume).
+# Reset ALL data (clear scores and databases) with down -v:
 docker-compose down -v
 docker-compose up -d --build
 
@@ -143,6 +144,12 @@ docker-compose up -d dashboard
 | 05 — Forensics | 300 | -15 |
 | 06 — Reverse Eng. | 350 | -15 |
 | **Maximum** | **1350** | |
+
+---
+
+## Tools & Frameworks Acknowledged
+
+Flask, Scapy (PCAP generation), SQLite, Docker / Docker Compose. Players use Wireshark / tshark, CyberChef, Burp Suite, Volatility 3, strings / grep, Ghidra / GDB / IDA Free.
 
 ---
 
