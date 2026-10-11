@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Dawn — Portal of Awakening</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="stars-bg"></div>
+    <div class="portal-container">
+        <div class="portal-header">
+            <div class="eye-symbol">👁</div>
+            <h1 class="cult-title">STELLAR DAWN</h1>
+            <p class="cult-subtitle">— Portal of Awakening —</p>
+            <div class="divider">✦ ✦ ✦</div>
+        </div>
+
+        <div class="login-box">
+            <h2 class="login-title">ACOLYTE AUTHENTICATION</h2>
+            <p class="login-desc">Enter your sacred credentials to access the inner sanctum.</p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('login') }}" class="login-form">
+                <div class="input-group">
+                    <label for="username">Identity</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your sacred name" required autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label for="password">Passphrase</label>
+                    <input type="password" id="password" name="password" placeholder="Speak the words of power" required autocomplete="off">
+                </div>
+                <button type="submit" class="btn-enter">ENTER THE SANCTUM</button>
+            </form>
+
+            <p class="footer-text">
+                "The stars have aligned. The visitors walk among us."<br>
+                <span class="footer-small">— Supreme Leader, Stellar Dawn</span>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
