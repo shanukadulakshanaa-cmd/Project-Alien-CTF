@@ -15,6 +15,8 @@ from scapy.all import (
 import random
 import os
 
+random.seed(7742)  # reproducible capture: every build produces the same PCAP
+
 OUTPUT_PATH = os.environ.get("OUTPUT_PATH", "/app/static/challenges/telemetry.pcap")
 
 # Stage 02 flag
@@ -159,6 +161,9 @@ def main():
     # Append any remaining alien packets at the end
     remaining = alien_pkts[len(insert_positions):]
     all_packets.extend(remaining)
+
+    # Wrap every packet in Ethernet so the capture has one consistent link type
+    all_packets = [p if p.haslayer(Ether) else Ether() / p for p in all_packets]
 
     # Write PCAP
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
