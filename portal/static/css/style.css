@@ -1,0 +1,466 @@
+/* ============================================================
+   STELLAR DAWN — Cult Portal Theme
+   Dark occult/mystical aesthetic with deep purples and gold
+   ============================================================ */
+
+/* --- Reset & Base --- */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --cult-bg: #0a0515;
+    --cult-surface: #1a0a2e;
+    --cult-card: #230f3d;
+    --cult-border: #3d1a6e;
+    --cult-primary: #9b59b6;
+    --cult-gold: #f1c40f;
+    --cult-gold-dim: #d4a017;
+    --cult-text: #e8d5f5;
+    --cult-text-dim: #8e7aad;
+    --cult-danger: #e74c3c;
+    --cult-success: #2ecc71;
+    --cult-glow: rgba(155, 89, 182, 0.3);
+    --cult-gold-glow: rgba(241, 196, 15, 0.3);
+}
+
+body {
+    font-family: 'Crimson Text', Georgia, serif;
+    background-color: var(--cult-bg);
+    color: var(--cult-text);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* --- Animated Star Background --- */
+.stars-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background: radial-gradient(ellipse at center, #1a0a2e 0%, #0a0515 70%, #050210 100%);
+    overflow: hidden;
+}
+
+.stars-bg::before,
+.stars-bg::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.stars-bg::before {
+    background-image:
+        radial-gradient(2px 2px at 20px 30px, #fff, transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+        radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(2px 2px at 160px 30px, #fff, transparent),
+        radial-gradient(1px 1px at 200px 60px, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 50px 110px, #fff, transparent),
+        radial-gradient(2px 2px at 100px 130px, rgba(255,255,255,0.5), transparent);
+    background-size: 250px 150px;
+    animation: twinkle 4s ease-in-out infinite alternate;
+}
+
+.stars-bg::after {
+    background-image:
+        radial-gradient(1px 1px at 25px 45px, rgba(155,89,182,0.6), transparent),
+        radial-gradient(2px 2px at 75px 20px, rgba(241,196,15,0.4), transparent),
+        radial-gradient(1px 1px at 125px 90px, rgba(155,89,182,0.5), transparent),
+        radial-gradient(1px 1px at 175px 55px, rgba(241,196,15,0.3), transparent),
+        radial-gradient(2px 2px at 60px 120px, rgba(155,89,182,0.4), transparent);
+    background-size: 200px 150px;
+    animation: twinkle 6s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes twinkle {
+    0% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* --- Layout --- */
+.portal-container {
+    position: relative;
+    z-index: 1;
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.portal-container.dashboard-view {
+    max-width: 800px;
+    justify-content: flex-start;
+    padding-top: 40px;
+}
+
+/* --- Header --- */
+.portal-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.eye-symbol {
+    font-size: 64px;
+    margin-bottom: 16px;
+    animation: pulse-glow 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px var(--cult-gold-glow));
+}
+
+@keyframes pulse-glow {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; }
+}
+
+.cult-title {
+    font-family: 'Cinzel', serif;
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: var(--cult-gold);
+    text-shadow: 0 0 30px var(--cult-gold-glow), 0 0 60px rgba(241, 196, 15, 0.15);
+    letter-spacing: 8px;
+    margin-bottom: 8px;
+}
+
+.cult-subtitle {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    color: var(--cult-primary);
+    letter-spacing: 4px;
+    font-weight: 400;
+}
+
+.divider {
+    color: var(--cult-gold-dim);
+    font-size: 1.2rem;
+    letter-spacing: 12px;
+    margin-top: 16px;
+    opacity: 0.7;
+}
+
+/* --- Login Box --- */
+.login-box {
+    background: linear-gradient(135deg, var(--cult-surface), var(--cult-card));
+    border: 1px solid var(--cult-border);
+    border-radius: 12px;
+    padding: 40px;
+    width: 100%;
+    box-shadow: 0 0 40px rgba(155, 89, 182, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.login-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.4rem;
+    color: var(--cult-gold);
+    text-align: center;
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+}
+
+.login-desc {
+    text-align: center;
+    color: var(--cult-text-dim);
+    font-size: 0.95rem;
+    margin-bottom: 28px;
+    font-style: italic;
+}
+
+/* --- Form Elements --- */
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    color: var(--cult-primary);
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 14px 16px;
+    background: rgba(10, 5, 21, 0.8);
+    border: 1px solid var(--cult-border);
+    border-radius: 6px;
+    color: var(--cult-text);
+    font-family: 'Crimson Text', serif;
+    font-size: 1.05rem;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.input-group input:focus {
+    border-color: var(--cult-gold);
+    box-shadow: 0 0 15px var(--cult-gold-glow);
+}
+
+.input-group input::placeholder {
+    color: var(--cult-text-dim);
+    opacity: 0.5;
+    font-style: italic;
+}
+
+.btn-enter {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--cult-border), var(--cult-primary));
+    border: 1px solid var(--cult-primary);
+    border-radius: 6px;
+    color: #fff;
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 8px;
+}
+
+.btn-enter:hover {
+    background: linear-gradient(135deg, var(--cult-primary), #8e44ad);
+    box-shadow: 0 0 25px var(--cult-glow);
+    transform: translateY(-2px);
+}
+
+/* --- Alerts --- */
+.alert {
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    border: 1px solid;
+}
+
+.alert-error {
+    background: rgba(231, 76, 60, 0.15);
+    border-color: var(--cult-danger);
+    color: #e74c3c;
+}
+
+/* --- Footer --- */
+.footer-text {
+    text-align: center;
+    margin-top: 28px;
+    color: var(--cult-text-dim);
+    font-style: italic;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.footer-small {
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
+
+/* ============================
+   DASHBOARD (Post-exploit)
+   ============================ */
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    padding: 16px 20px;
+    background: var(--cult-surface);
+    border: 1px solid var(--cult-border);
+    border-radius: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.user-badge, .role-badge {
+    font-size: 0.9rem;
+    color: var(--cult-text-dim);
+}
+
+.user-badge strong {
+    color: var(--cult-gold);
+}
+
+.role-badge {
+    background: rgba(155, 89, 182, 0.2);
+    padding: 4px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--cult-border);
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.btn-logout {
+    margin-left: auto;
+    padding: 8px 16px;
+    background: rgba(231, 76, 60, 0.2);
+    border: 1px solid var(--cult-danger);
+    border-radius: 4px;
+    color: var(--cult-danger);
+    text-decoration: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    transition: all 0.3s;
+}
+
+.btn-logout:hover {
+    background: rgba(231, 76, 60, 0.4);
+}
+
+/* --- Flag Banner --- */
+.flag-banner {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 24px;
+    background: linear-gradient(135deg, rgba(46, 204, 113, 0.1), rgba(241, 196, 15, 0.1));
+    border: 2px solid var(--cult-success);
+    border-radius: 8px;
+    margin-bottom: 24px;
+    animation: flag-pulse 2s ease-in-out infinite;
+}
+
+@keyframes flag-pulse {
+    0%, 100% { box-shadow: 0 0 10px rgba(46, 204, 113, 0.2); }
+    50% { box-shadow: 0 0 25px rgba(46, 204, 113, 0.4); }
+}
+
+.flag-icon {
+    font-size: 2.5rem;
+}
+
+.flag-content h3 {
+    font-family: 'Cinzel', serif;
+    color: var(--cult-success);
+    font-size: 1rem;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+}
+
+.flag-text {
+    font-family: 'Courier New', monospace;
+    font-size: 1.3rem;
+    color: var(--cult-gold);
+    font-weight: bold;
+    letter-spacing: 1px;
+    word-break: break-all;
+}
+
+/* --- Communications --- */
+.comms-section {
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    color: var(--cult-gold);
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--cult-border);
+}
+
+.comms-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.comm-item {
+    background: var(--cult-surface);
+    border: 1px solid var(--cult-border);
+    border-radius: 8px;
+    padding: 16px;
+    transition: all 0.3s;
+}
+
+.comm-item:hover {
+    border-color: var(--cult-primary);
+}
+
+.comm-item.comm-classified {
+    border-color: var(--cult-gold-dim);
+    background: linear-gradient(135deg, var(--cult-surface), rgba(241, 196, 15, 0.05));
+}
+
+.comm-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.comm-sender {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    color: var(--cult-primary);
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+.comm-time {
+    font-size: 0.75rem;
+    color: var(--cult-text-dim);
+    opacity: 0.6;
+}
+
+.comm-body {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--cult-text);
+}
+
+/* --- Token Section --- */
+.token-section {
+    width: 100%;
+    padding: 24px;
+    background: linear-gradient(135deg, rgba(241, 196, 15, 0.08), rgba(155, 89, 182, 0.08));
+    border: 1px solid var(--cult-gold-dim);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.token-section h3 {
+    font-family: 'Cinzel', serif;
+    color: var(--cult-gold);
+    font-size: 1rem;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.token-hint {
+    font-size: 0.9rem;
+    color: var(--cult-text-dim);
+    margin-bottom: 12px;
+    font-style: italic;
+}
+
+.token-value {
+    display: inline-block;
+    padding: 12px 24px;
+    background: rgba(10, 5, 21, 0.8);
+    border: 1px solid var(--cult-gold);
+    border-radius: 6px;
+    color: var(--cult-gold);
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
